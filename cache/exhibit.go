@@ -124,6 +124,7 @@ func (mine *ExhibitInfo) initInfo(db *nosql.Exhibit) {
 	mine.Operator = db.Operator
 	mine.SN = db.SN
 	mine.Owner = db.Owner
+	mine.Entity = db.Entity
 	mine.Specials = db.Specials
 	mine.Locals = db.Locals
 	mine.Tags = db.Tags
