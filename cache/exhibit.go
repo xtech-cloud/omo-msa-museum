@@ -157,7 +157,7 @@ func (mine *ExhibitInfo) UpdateLocals(operator string, list []*pb.LocalInfo) err
 func (mine *ExhibitInfo) UpdateSpecials(operator string, list []*pb.SpecialInfo) error {
 	arr := make([]*proxy.SpecialInfo, 0, len(list))
 	for _, info := range list {
-		arr = append(arr, &proxy.SpecialInfo{ID: info.ID, Key: info.Key, Value: info.Value})
+		arr = append(arr, &proxy.SpecialInfo{ID: info.Id, Key: info.Key, Value: info.Value})
 	}
 	err := nosql.UpdateExhibitSpecials(mine.UID, operator, arr)
 	if err == nil {
