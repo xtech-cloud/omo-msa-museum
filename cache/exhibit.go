@@ -142,7 +142,7 @@ func (mine *ExhibitInfo) UpdateSN(sn, operator string) error {
 
 func (mine *ExhibitInfo) UpdateLocals(operator string, list []*pb.LocalInfo) error {
 	arr := make([]*proxy.LocalInfo, 0, len(list))
-	for _, info := range arr {
+	for _, info := range list {
 		arr = append(arr, &proxy.LocalInfo{Language: info.Language, Name: info.Name, Remark: info.Remark})
 	}
 	err := nosql.UpdateExhibitLocals(mine.UID, operator, arr)
@@ -156,7 +156,7 @@ func (mine *ExhibitInfo) UpdateLocals(operator string, list []*pb.LocalInfo) err
 
 func (mine *ExhibitInfo) UpdateSpecials(operator string, list []*pb.SpecialInfo) error {
 	arr := make([]*proxy.SpecialInfo, 0, len(list))
-	for _, info := range arr {
+	for _, info := range list {
 		arr = append(arr, &proxy.SpecialInfo{ID: info.ID, Key: info.Key, Value: info.Value})
 	}
 	err := nosql.UpdateExhibitSpecials(mine.UID, operator, arr)
