@@ -25,6 +25,7 @@ func switchExhibit(info *cache.ExhibitInfo) *pb.ExhibitInfo {
 	tmp.Owner = info.Owner
 	tmp.Entity = info.Entity
 	tmp.Tags = info.Tags
+	tmp.Size = cache.SwitchVector2(&info.Size)
 	tmp.Locals = switchLocals(info.Locals)
 	tmp.Specials = switchSpecials(info.Specials)
 	return tmp
@@ -59,7 +60,7 @@ func (mine *ExhibitService) AddOne(ctx context.Context, in *pb.ReqExhibitAdd, ou
 		return nil
 	}
 
-	info, err := cache.Context().CreateExhibit(in.Name, in.Remark, in.Sn, in.Entity, in.Owner, in.Operator)
+	info, err := cache.Context().CreateExhibit(in.Name, in.Remark, in.Sn, in.Entity, in.Owner, in.Operator, cache.SwitchVector(in.Size))
 	if err != nil {
 		out.Status = outError(path, err.Error(), pbstatus.ResultStatus_DBException)
 		return nil
@@ -212,6 +213,9 @@ func (mine *ExhibitService) UpdateByFilter(ctx context.Context, in *pb.RequestUp
 	var err error
 	if in.Field == "sn" {
 		err = info.UpdateSN(in.Value, in.Operator)
+	}else if in.Field == "size" {
+		size := cache.ParseSize(in.Value)
+		err = info.UpdateSize(in.Operator, size)
 	} else {
 		err = errors.New("the key not defined")
 	}

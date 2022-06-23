@@ -2,7 +2,9 @@ package cache
 
 import (
 	"errors"
+	pb "github.com/xtech-cloud/omo-msp-museum/proto/museum"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"omo.msa.museum/proxy"
 	"omo.msa.museum/proxy/nosql"
 	"time"
 )
@@ -25,6 +27,7 @@ type SandtableInfo struct {
 	Narrate string
 	BGM string
 	Tags     []string
+	Path []*proxy.FrameKeyInfo
 }
 
 func (mine *cacheContext) CreateSandtable(name, remark, bg, owner, operator string, w, h uint32) (*SandtableInfo, error) {
@@ -111,6 +114,21 @@ func (mine *SandtableInfo) UpdateBackground(asset, operator string, width, heigh
 		mine.Background = asset
 		mine.Width = width
 		mine.Height = height
+		mine.Operator = operator
+	}
+	return err
+}
+
+func (mine *SandtableInfo) UpdatePath(operator string, path []*pb.PathKeyInfo) error {
+	list := make([]*proxy.FrameKeyInfo, 0, len(path))
+	for _, info := range path {
+		pos := SwitchVector(info.Position)
+		ro := SwitchVector(info.Rotation)
+		list = append(list, &proxy.FrameKeyInfo{Scale: info.Scale, Position: pos, Rotation: ro})
+	}
+	err := nosql.UpdateSandtablePath(mine.UID, operator, list)
+	if err == nil {
+		mine.Path = list
 		mine.Operator = operator
 	}
 	return err

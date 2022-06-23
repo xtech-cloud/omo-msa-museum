@@ -21,6 +21,7 @@ type Exhibit struct {
 	Owner  string   `json:"owner" bson:"owner"`
 	Entity string `json:"entity" bson:"entity"`
 	SN string `json:"sn" bson:"sn"`
+	Size proxy.VectorInfo `json:"size" bson:"size"`
 	Tags []string `json:"tags" bson:"tags"`
 	Locals []*proxy.LocalInfo `json:"locals" bson:"locals"`
 	Specials []*proxy.SpecialInfo `json:"specials" bson:"specials"`
@@ -119,6 +120,12 @@ func GetAllExhibits() ([]*Exhibit, error) {
 
 func UpdateExhibitSN(uid, sn, operator string) error {
 	msg := bson.M{"sn": sn, "operator": operator, "updatedAt": time.Now()}
+	_, err := updateOne(TableExhibit, uid, msg)
+	return err
+}
+
+func UpdateExhibitSize(uid, operator string, size proxy.VectorInfo) error {
+	msg := bson.M{"size": size, "operator": operator, "updatedAt": time.Now()}
 	_, err := updateOne(TableExhibit, uid, msg)
 	return err
 }

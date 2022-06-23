@@ -14,7 +14,7 @@ type BoothInfo struct {
 	Parent string
 	Owner   string
 	Exhibit string
-	Position proxy.PositionInfo
+	Position proxy.VectorInfo
 }
 
 func (mine *cacheContext) CreateBooth(name, remark, owner, parent, operator string) (*BoothInfo, error) {
@@ -125,7 +125,7 @@ func (mine *BoothInfo) UpdateBase(name, remark, operator string) error {
 	return err
 }
 
-func (mine *BoothInfo) UpdatePosition(operator string, pos proxy.PositionInfo) error {
+func (mine *BoothInfo) UpdatePosition(operator string, pos proxy.VectorInfo) error {
 	err := nosql.UpdateBoothPosition(mine.UID, operator, pos)
 	if err == nil {
 		mine.Position = pos

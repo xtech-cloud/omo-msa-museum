@@ -24,7 +24,7 @@ func switchBooth(info *cache.BoothInfo) *pb.BoothInfo {
 	tmp.Exhibit = info.Exhibit
 	tmp.Owner = info.Owner
 	tmp.Parent = info.Parent
-	tmp.Position = &pb.PositionInfo{X: info.Position.X, Y: info.Position.Y}
+	tmp.Position = &pb.Vector3{X: info.Position.X, Y: info.Position.Y}
 	return tmp
 }
 

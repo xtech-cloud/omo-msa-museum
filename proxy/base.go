@@ -12,7 +12,14 @@ type LocalInfo struct {
 	Remark string `json:"remark" bson:"remark"`
 }
 
-type PositionInfo struct {
+type VectorInfo struct {
 	X float32 `json:"x" bson:"x"`
 	Y float32 `json:"y" bson:"y"`
+	Z float32 `json:"z" bson:"z"`
+}
+
+type FrameKeyInfo struct {
+	Scale float32 `json:"scale" bson:"scale"`
+	Position VectorInfo `json:"position" bson:"position"`
+	Rotation VectorInfo `json:"rotation" bson:"rotation"`
 }

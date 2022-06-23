@@ -16,12 +16,13 @@ type ExhibitInfo struct {
 	SN string
 	Entity  string
 	Owner  string
+	Size proxy.VectorInfo
 	Tags   []string
 	Locals []*proxy.LocalInfo
 	Specials []*proxy.SpecialInfo
 }
 
-func (mine *cacheContext) CreateExhibit(name, remark, sn, entity, owner, operator string) (*ExhibitInfo, error) {
+func (mine *cacheContext) CreateExhibit(name, remark, sn, entity, owner, operator string, size proxy.VectorInfo) (*ExhibitInfo, error) {
 	db := new(nosql.Exhibit)
 	db.UID = primitive.NewObjectID()
 	db.ID = nosql.GetExhibitNextID()
@@ -31,6 +32,7 @@ func (mine *cacheContext) CreateExhibit(name, remark, sn, entity, owner, operato
 	db.Entity = entity
 	db.Owner = owner
 	db.SN = sn
+	db.Size = size
 	db.Locals = make([]*proxy.LocalInfo, 0, 1)
 	db.Locals = append(db.Locals, &proxy.LocalInfo{Language: "zh", Name: name, Remark: remark})
 	db.Tags = make([]string, 0, 1)
@@ -125,6 +127,7 @@ func (mine *ExhibitInfo) initInfo(db *nosql.Exhibit) {
 	mine.SN = db.SN
 	mine.Owner = db.Owner
 	mine.Entity = db.Entity
+	mine.Size = db.Size
 	mine.Specials = db.Specials
 	mine.Locals = db.Locals
 	mine.Tags = db.Tags
@@ -134,6 +137,16 @@ func (mine *ExhibitInfo) UpdateSN(sn, operator string) error {
 	err := nosql.UpdateExhibitSN(mine.UID, sn, operator)
 	if err == nil {
 		mine.SN = sn
+		mine.Operator = operator
+		mine.UpdateTime = time.Now()
+	}
+	return err
+}
+
+func (mine *ExhibitInfo) UpdateSize(operator string, size proxy.VectorInfo) error {
+	err := nosql.UpdateExhibitSize(mine.UID, operator, size)
+	if err == nil {
+		mine.Size = size
 		mine.Operator = operator
 		mine.UpdateTime = time.Now()
 	}

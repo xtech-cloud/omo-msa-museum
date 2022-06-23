@@ -29,6 +29,12 @@ func switchSandtable(info *cache.SandtableInfo) *pb.SandtableInfo {
 	tmp.Width = info.Width
 	tmp.Height = info.Height
 	tmp.Tags = info.Tags
+	tmp.Path = make([]*pb.PathKeyInfo, 0, len(info.Path))
+	for _, item := range info.Path {
+		pos := cache.SwitchVector2(&item.Position)
+		ro := cache.SwitchVector2(&item.Rotation)
+		tmp.Path = append(tmp.Path, &pb.PathKeyInfo{Scale: item.Scale, Position: pos, Rotation: ro})
+	}
 	return tmp
 }
 
@@ -205,6 +211,27 @@ func (mine *SandtableService) UpdateByFilter(ctx context.Context, in *pb.Request
 
 	if err != nil {
 		out.Status = outError(path, err.Error(), pbstatus.ResultStatus_DBException)
+		return nil
+	}
+	out.Status = outLog(path, out)
+	return nil
+}
+
+func (mine *SandtableService) UpdatePath(ctx context.Context, in *pb.ReqSandtablePath, out *pb.ReplyInfo) error {
+	path := "sandtable.updateByFilter"
+	inLog(path, in)
+	if len(in.Uid) < 1 {
+		out.Status = outError(path, "the uid is empty ", pbstatus.ResultStatus_Empty)
+		return nil
+	}
+	info, er := cache.Context().GetSandtable(in.Uid)
+	if er != nil {
+		out.Status = outError(path, "the sandtable not found ", pbstatus.ResultStatus_NotExisted)
+		return nil
+	}
+	er = info.UpdatePath(in.Operator, in.Path)
+	if er != nil {
+		out.Status = outError(path, er.Error(), pbstatus.ResultStatus_DBException)
 		return nil
 	}
 	out.Status = outLog(path, out)

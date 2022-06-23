@@ -18,15 +18,15 @@ type Anchor struct {
 	Creator     string             `json:"creator" bson:"creator"`
 	Operator    string             `json:"operator" bson:"operator"`
 
-	Name      string `json:"name" bson:"name"`
-	Remark    string `json:"remark" bson:"remark"`
-	Owner string `json:"owner" bson:"owner"`
-	Parent string `json:"parent" bson:"parent"`
-	Cover string `json:"cover" bson:"cover"`
-	Panorama string `json:"panorama" bson:"panorama"`
-	Link string `json:"link" bson:"link"`
-	Position proxy.PositionInfo `json:"position" bson:"position"`
-	Tags []string `json:"tags" bson:"tags"`
+	Name      string          `json:"name" bson:"name"`
+	Remark    string          `json:"remark" bson:"remark"`
+	Owner string              `json:"owner" bson:"owner"`
+	Parent string             `json:"parent" bson:"parent"`
+	Cover string              `json:"cover" bson:"cover"`
+	Panorama string           `json:"panorama" bson:"panorama"`
+	Link string               `json:"link" bson:"link"`
+	Position proxy.VectorInfo `json:"position" bson:"position"`
+	Tags []string             `json:"tags" bson:"tags"`
 }
 
 func CreateAnchor(info *Anchor) error {
@@ -117,7 +117,7 @@ func UpdateAnchorPanorama(uid, cover, operator string) error {
 	return err
 }
 
-func UpdateAnchorPosition(uid, operator string, pos proxy.PositionInfo) error {
+func UpdateAnchorPosition(uid, operator string, pos proxy.VectorInfo) error {
 	msg := bson.M{"position": pos, "operator": operator, "updatedAt": time.Now()}
 	_, err := updateOne(TableAnchor, uid, msg)
 	return err

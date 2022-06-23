@@ -17,12 +17,12 @@ type Booth struct {
 	Creator     string             `json:"creator" bson:"creator"`
 	Operator    string             `json:"operator" bson:"operator"`
 
-	Name    string `json:"name" bson:"name"`
-	Remark  string `json:"remark" bson:"remark"`
-	Exhibit   string `json:"exhibit" bson:"exhibit"`
-	Owner string `json:"owner" bson:"owner"`
-	Parent string `json:"parent" bson:"parent"`
-	Position proxy.PositionInfo `json:"position" bson:"position"`
+	Name    string            `json:"name" bson:"name"`
+	Remark  string            `json:"remark" bson:"remark"`
+	Exhibit   string          `json:"exhibit" bson:"exhibit"`
+	Owner string              `json:"owner" bson:"owner"`
+	Parent string             `json:"parent" bson:"parent"`
+	Position proxy.VectorInfo `json:"position" bson:"position"`
 }
 
 func CreateBooth(info *Booth) error {
@@ -101,7 +101,7 @@ func UpdateBoothExhibit(uid, exhibit, operator string) error {
 	return err
 }
 
-func UpdateBoothPosition(uid, operator string, pos proxy.PositionInfo) error {
+func UpdateBoothPosition(uid, operator string, pos proxy.VectorInfo) error {
 	msg := bson.M{"position": pos, "operator":operator, "updatedAt": time.Now()}
 	_, err := updateOne(TableBooth, uid, msg)
 	return err

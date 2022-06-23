@@ -17,7 +17,7 @@ type AnchorInfo struct {
 	Panorama string
 	Link string
 	Owner string
-	Position proxy.PositionInfo
+	Position proxy.VectorInfo
 	Tags    []string
 }
 

@@ -1,9 +1,13 @@
 package cache
 
 import (
+	pb "github.com/xtech-cloud/omo-msp-museum/proto/museum"
 	"omo.msa.museum/config"
+	"omo.msa.museum/proxy"
 	"omo.msa.museum/proxy/nosql"
 	"reflect"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -63,4 +67,29 @@ func checkPage(page, number uint32, all interface{}) (uint32, uint32, interface{
 
 	list := array.Slice(int(start), int(end))
 	return total, maxPage, list.Interface()
+}
+
+func SwitchVector(point *pb.Vector3) proxy.VectorInfo {
+	return proxy.VectorInfo{X: point.X, Y: point.Y, Z: point.Z}
+}
+
+func SwitchVector2(point *proxy.VectorInfo) *pb.Vector3 {
+	return &pb.Vector3{X: point.X, Y: point.Y, Z: point.Z}
+}
+
+func ParseSize(str string) proxy.VectorInfo {
+	arr := strings.Split(str, ";")
+	vec := proxy.VectorInfo{
+		X: 0, Y: 0, Z: 0,
+	}
+	if len(arr) != 3 {
+		return vec
+	}
+	x,_ := strconv.ParseFloat(arr[0], 32)
+	y,_ := strconv.ParseFloat(arr[1], 32)
+	z,_ := strconv.ParseFloat(arr[2], 32)
+	vec.X = float32(x)
+	vec.Y = float32(y)
+	vec.Z = float32(z)
+	return vec
 }

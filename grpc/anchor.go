@@ -26,7 +26,7 @@ func switchAnchor(info *cache.AnchorInfo) *pb.AnchorInfo {
     tmp.Panorama = info.Panorama
     tmp.Link = info.Link
     //tmp.Owner = info.Owner
-    tmp.Position = &pb.PositionInfo{X: info.Position.X, Y: info.Position.Y}
+    tmp.Position = &pb.Vector3{X: info.Position.X, Y: info.Position.Y}
 	tmp.Tags = info.Tags
 	return tmp
 }
