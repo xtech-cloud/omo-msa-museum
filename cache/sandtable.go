@@ -124,7 +124,7 @@ func (mine *SandtableInfo) UpdatePath(operator string, path []*pb.PathKeyInfo) e
 	for _, info := range path {
 		pos := SwitchVector(info.Position)
 		ro := SwitchVector(info.Rotation)
-		list = append(list, &proxy.FrameKeyInfo{Scale: info.Scale, Position: pos, Rotation: ro})
+		list = append(list, &proxy.FrameKeyInfo{Key: info.Key, Scale: info.Scale, Position: pos, Rotation: ro})
 	}
 	err := nosql.UpdateSandtablePath(mine.UID, operator, list)
 	if err == nil {

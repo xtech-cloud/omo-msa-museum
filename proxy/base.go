@@ -19,6 +19,7 @@ type VectorInfo struct {
 }
 
 type FrameKeyInfo struct {
+	Key string `json:"key" bson:"key"`
 	Scale float32 `json:"scale" bson:"scale"`
 	Position VectorInfo `json:"position" bson:"position"`
 	Rotation VectorInfo `json:"rotation" bson:"rotation"`

@@ -33,7 +33,7 @@ func switchSandtable(info *cache.SandtableInfo) *pb.SandtableInfo {
 	for _, item := range info.Path {
 		pos := cache.SwitchVector2(&item.Position)
 		ro := cache.SwitchVector2(&item.Rotation)
-		tmp.Path = append(tmp.Path, &pb.PathKeyInfo{Scale: item.Scale, Position: pos, Rotation: ro})
+		tmp.Path = append(tmp.Path, &pb.PathKeyInfo{Key: item.Key, Scale: item.Scale, Position: pos, Rotation: ro})
 	}
 	return tmp
 }
