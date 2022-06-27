@@ -27,7 +27,7 @@ type SandtableInfo struct {
 	Narrate string
 	BGM string
 	Tags     []string
-	Path []*proxy.FrameKeyInfo
+	Paths []*proxy.PathInfo
 }
 
 func (mine *cacheContext) CreateSandtable(name, remark, bg, owner, operator string, w, h uint32) (*SandtableInfo, error) {
@@ -43,6 +43,8 @@ func (mine *cacheContext) CreateSandtable(name, remark, bg, owner, operator stri
 	db.Background = bg
 	db.Owner = owner
 	db.Status = SandtableIdle
+	db.Paths = make([]*proxy.PathInfo, 0, 1)
+	db.Tags = make([]string, 0, 1)
 	err := nosql.CreateSandtable(db)
 	if err != nil {
 		return nil, err
@@ -86,6 +88,7 @@ func (mine *SandtableInfo) initInfo(db *nosql.Sandtable) {
 	mine.Remark = db.Remark
 	mine.CreateTime = db.CreatedTime
 	mine.Creator = db.Creator
+	mine.Operator = db.Operator
 	mine.Status = db.Status
 	mine.Background = db.Background
 	mine.Width = db.Width
@@ -96,6 +99,7 @@ func (mine *SandtableInfo) initInfo(db *nosql.Sandtable) {
 	mine.Mask = db.Mask
 	mine.Owner = db.Owner
 	mine.Tags = db.Tags
+	mine.Paths = db.Paths
 }
 
 func (mine *SandtableInfo) UpdateBase(name, remark, operator string) error {
@@ -119,17 +123,56 @@ func (mine *SandtableInfo) UpdateBackground(asset, operator string, width, heigh
 	return err
 }
 
-func (mine *SandtableInfo) UpdatePath(operator string, path []*pb.PathKeyInfo) error {
-	list := make([]*proxy.FrameKeyInfo, 0, len(path))
-	for _, info := range path {
-		pos := SwitchVector(info.Position)
-		ro := SwitchVector(info.Rotation)
-		list = append(list, &proxy.FrameKeyInfo{Key: info.Key, Scale: info.Scale, Position: pos, Rotation: ro})
+func (mine *SandtableInfo) UpdatePath(operator, path, name, color string, points []*pb.PathKeyInfo) error {
+	if len(path) > 0 {
+		er := mine.RemovePath(operator, path)
+		if er != nil {
+			return er
+		}
 	}
-	err := nosql.UpdateSandtablePath(mine.UID, operator, list)
+	if len(name) < 1 && len(points) == 0{
+		return nil
+	}
+	return mine.CreatePath(operator, path, name, color, points)
+}
+
+func (mine *SandtableInfo) CreatePath(operator, path, name, color string, points []*pb.PathKeyInfo) error {
+	info := new(proxy.PathInfo)
+	if len(path) < 1 {
+		info.UID = primitive.NewObjectID().Hex()
+	}else{
+		info.UID = path
+	}
+	info.Name = name
+	info.Color = color
+	info.Points = make([]proxy.FrameKeyInfo, 0, len(points))
+	for _, item := range points {
+		pos := SwitchVector(item.Position)
+		ro := SwitchVector(item.Rotation)
+		info.Points = append(info.Points, proxy.FrameKeyInfo{Key: item.Key, Scale: item.Scale, Position: pos, Rotation: ro})
+	}
+	err := nosql.AppendSandtablePath(mine.UID, info)
 	if err == nil {
-		mine.Path = list
+		mine.Paths = append(mine.Paths, info)
 		mine.Operator = operator
+	}
+	return err
+}
+
+func (mine *SandtableInfo) RemovePath(operator, path string) error {
+	err := nosql.SubtractSandtablePath(mine.UID, path)
+	if err == nil {
+		mine.Operator = operator
+		for i, info := range mine.Paths {
+			if info.UID == path {
+				if i == len(mine.Paths) - 1 {
+					mine.Paths = append(mine.Paths[:i])
+				}else{
+					mine.Paths = append(mine.Paths[:i], mine.Paths[i+1:]...)
+				}
+				break
+			}
+		}
 	}
 	return err
 }

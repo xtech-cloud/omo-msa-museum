@@ -7,6 +7,7 @@ import (
 	pb "github.com/xtech-cloud/omo-msp-museum/proto/museum"
 	pbstatus "github.com/xtech-cloud/omo-msp-status/proto/status"
 	"omo.msa.museum/cache"
+	"omo.msa.museum/proxy"
 )
 
 type SandtableService struct{}
@@ -29,11 +30,23 @@ func switchSandtable(info *cache.SandtableInfo) *pb.SandtableInfo {
 	tmp.Width = info.Width
 	tmp.Height = info.Height
 	tmp.Tags = info.Tags
-	tmp.Path = make([]*pb.PathKeyInfo, 0, len(info.Path))
-	for _, item := range info.Path {
+	tmp.Paths = make([]*pb.PathInfo, 0, len(info.Paths))
+	for _, item := range info.Paths {
+		tmp.Paths = append(tmp.Paths, switchPath(item))
+	}
+	return tmp
+}
+
+func switchPath(path *proxy.PathInfo) *pb.PathInfo {
+	tmp := new(pb.PathInfo)
+	tmp.Uid = path.UID
+	tmp.Name = path.Name
+	tmp.Color = path.Color
+	tmp.Points = make([]*pb.PathKeyInfo, 0, len(path.Points))
+	for _, item := range path.Points {
 		pos := cache.SwitchVector2(&item.Position)
 		ro := cache.SwitchVector2(&item.Rotation)
-		tmp.Path = append(tmp.Path, &pb.PathKeyInfo{Key: item.Key, Scale: item.Scale, Position: pos, Rotation: ro})
+		tmp.Points = append(tmp.Points, &pb.PathKeyInfo{Key: item.Key, Scale: item.Scale, Position: pos, Rotation: ro})
 	}
 	return tmp
 }
@@ -229,7 +242,7 @@ func (mine *SandtableService) UpdatePath(ctx context.Context, in *pb.ReqSandtabl
 		out.Status = outError(path, "the sandtable not found ", pbstatus.ResultStatus_NotExisted)
 		return nil
 	}
-	er = info.UpdatePath(in.Operator, in.Path)
+	er = info.UpdatePath(in.Operator, in.Path, in.Name, in.Color, in.Points)
 	if er != nil {
 		out.Status = outError(path, er.Error(), pbstatus.ResultStatus_DBException)
 		return nil

@@ -18,6 +18,13 @@ type VectorInfo struct {
 	Z float32 `json:"z" bson:"z"`
 }
 
+type PathInfo struct {
+	UID string `json:"uid" bson:"uid"`
+	Name string `json:"name" bson:"name"`
+	Color string `json:"color" bson:"color"`
+	Points []FrameKeyInfo `json:"points" bson:"points"`
+}
+
 type FrameKeyInfo struct {
 	Key string `json:"key" bson:"key"`
 	Scale float32 `json:"scale" bson:"scale"`

@@ -28,7 +28,7 @@ type Sandtable struct {
 	Height uint32 `json:"height" bson:"height"`
 	Narrate string `json:"narrate" bson:"narrate"`
 	BGM string `json:"bgm" bson:"bgm"`
-	Path []*proxy.FrameKeyInfo `json:"path" bson:"path"`
+	Paths []*proxy.PathInfo `json:"paths" bson:"paths"`
 	Tags []string `json:"tags" bson:"tags"`
 }
 
@@ -95,8 +95,8 @@ func UpdateSandtableStatus(uid, operator string, st uint8) error {
 	return err
 }
 
-func UpdateSandtablePath(uid, operator string, path []*proxy.FrameKeyInfo) error {
-	msg := bson.M{"path": path, "operator": operator, "updatedAt": time.Now()}
+func UpdateSandtablePath(uid, operator string, path []*proxy.PathInfo) error {
+	msg := bson.M{"paths": path, "operator": operator, "updatedAt": time.Now()}
 	_, err := updateOne(TableSandtable, uid, msg)
 	return err
 }
@@ -109,5 +109,17 @@ func RemoveSandtable(uid, operator string) error {
 func UpdateSandtableBGM(uid, bgm, operator string) error {
 	msg := bson.M{"bgm": bgm, "operator":operator, "updatedAt": time.Now()}
 	_, err := updateOne(TableSandtable, uid, msg)
+	return err
+}
+
+func AppendSandtablePath(uid string, path *proxy.PathInfo) error {
+	msg := bson.M{"paths": path}
+	_, err := appendElement(TableSandtable, uid, msg)
+	return err
+}
+
+func SubtractSandtablePath(uid, key string) error {
+	msg := bson.M{"paths": bson.M{"uid": key}}
+	_, err := removeElement(TableSandtable, uid, msg)
 	return err
 }
