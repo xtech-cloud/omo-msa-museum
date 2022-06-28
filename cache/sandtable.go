@@ -112,6 +112,24 @@ func (mine *SandtableInfo) UpdateBase(name, remark, operator string) error {
 	return err
 }
 
+func (mine *SandtableInfo) UpdateBGM(operator, asset string) error {
+	err := nosql.UpdateSandtableBGM(mine.UID, asset, operator)
+	if err == nil {
+		mine.BGM = asset
+		mine.Operator = operator
+	}
+	return err
+}
+
+func (mine *SandtableInfo) UpdateNarrate(operator, asset string) error {
+	err := nosql.UpdateSandtableNarrate(mine.UID, asset, operator)
+	if err == nil {
+		mine.Narrate = asset
+		mine.Operator = operator
+	}
+	return err
+}
+
 func (mine *SandtableInfo) UpdateBackground(asset, operator string, width, height uint32) error {
 	err := nosql.UpdateSandtableBG(mine.UID, asset, operator, width, height)
 	if err == nil {

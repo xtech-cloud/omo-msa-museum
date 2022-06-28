@@ -106,8 +106,14 @@ func RemoveSandtable(uid, operator string) error {
 	return err
 }
 
-func UpdateSandtableBGM(uid, bgm, operator string) error {
-	msg := bson.M{"bgm": bgm, "operator":operator, "updatedAt": time.Now()}
+func UpdateSandtableBGM(uid, asset, operator string) error {
+	msg := bson.M{"bgm": asset, "operator":operator, "updatedAt": time.Now()}
+	_, err := updateOne(TableSandtable, uid, msg)
+	return err
+}
+
+func UpdateSandtableNarrate(uid, asset, operator string) error {
+	msg := bson.M{"narrate": asset, "operator":operator, "updatedAt": time.Now()}
 	_, err := updateOne(TableSandtable, uid, msg)
 	return err
 }

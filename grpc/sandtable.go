@@ -215,13 +215,19 @@ func (mine *SandtableService) UpdateByFilter(ctx context.Context, in *pb.Request
 		out.Status = outError(path, "the uid is empty ", pbstatus.ResultStatus_Empty)
 		return nil
 	}
-	_, er := cache.Context().GetSandtable(in.Uid)
+	info, er := cache.Context().GetSandtable(in.Uid)
 	if er != nil {
 		out.Status = outError(path, "the sandtable not found ", pbstatus.ResultStatus_NotExisted)
 		return nil
 	}
 	var err error
-
+	if in.Field == "bgm" {
+		err = info.UpdateBGM(in.Value, in.Operator)
+	}else if in.Field == "narrate" {
+		err = info.UpdateNarrate(in.Value, in.Operator)
+	}else{
+		err = errors.New("the field not defined")
+	}
 	if err != nil {
 		out.Status = outError(path, err.Error(), pbstatus.ResultStatus_DBException)
 		return nil
