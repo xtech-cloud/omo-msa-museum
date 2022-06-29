@@ -237,7 +237,7 @@ func (mine *SandtableService) UpdateByFilter(ctx context.Context, in *pb.Request
 }
 
 func (mine *SandtableService) UpdatePath(ctx context.Context, in *pb.ReqSandtablePath, out *pb.ReplyInfo) error {
-	path := "sandtable.updateByFilter"
+	path := "sandtable.updatePath"
 	inLog(path, in)
 	if len(in.Uid) < 1 {
 		out.Status = outError(path, "the uid is empty ", pbstatus.ResultStatus_Empty)
@@ -248,11 +248,12 @@ func (mine *SandtableService) UpdatePath(ctx context.Context, in *pb.ReqSandtabl
 		out.Status = outError(path, "the sandtable not found ", pbstatus.ResultStatus_NotExisted)
 		return nil
 	}
-	er = info.UpdatePath(in.Operator, in.Path, in.Name, in.Color, in.Points)
+	path, er = info.UpdatePath(in.Operator, in.Path, in.Name, in.Color, in.Points)
 	if er != nil {
 		out.Status = outError(path, er.Error(), pbstatus.ResultStatus_DBException)
 		return nil
 	}
+	out.Uid = path
 	out.Status = outLog(path, out)
 	return nil
 }

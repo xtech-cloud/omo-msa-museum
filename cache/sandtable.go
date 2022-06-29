@@ -141,20 +141,20 @@ func (mine *SandtableInfo) UpdateBackground(asset, operator string, width, heigh
 	return err
 }
 
-func (mine *SandtableInfo) UpdatePath(operator, path, name, color string, points []*pb.PathKeyInfo) error {
+func (mine *SandtableInfo) UpdatePath(operator, path, name, color string, points []*pb.PathKeyInfo) (string,error) {
 	if len(path) > 0 {
 		er := mine.RemovePath(operator, path)
 		if er != nil {
-			return er
+			return "",er
 		}
 	}
 	if len(name) < 1 && len(points) == 0{
-		return nil
+		return "", nil
 	}
 	return mine.CreatePath(operator, path, name, color, points)
 }
 
-func (mine *SandtableInfo) CreatePath(operator, path, name, color string, points []*pb.PathKeyInfo) error {
+func (mine *SandtableInfo) CreatePath(operator, path, name, color string, points []*pb.PathKeyInfo) (string, error) {
 	info := new(proxy.PathInfo)
 	if len(path) < 1 {
 		info.UID = primitive.NewObjectID().Hex()
@@ -174,7 +174,7 @@ func (mine *SandtableInfo) CreatePath(operator, path, name, color string, points
 		mine.Paths = append(mine.Paths, info)
 		mine.Operator = operator
 	}
-	return err
+	return info.UID,err
 }
 
 func (mine *SandtableInfo) RemovePath(operator, path string) error {
