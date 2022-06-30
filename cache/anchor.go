@@ -109,3 +109,12 @@ func (mine *AnchorInfo) UpdateCover(cover, operator string) error {
 	}
 	return err
 }
+
+func (mine *AnchorInfo) UpdatePosition(operator string, pos proxy.VectorInfo) error {
+	err := nosql.UpdateAnchorPosition(mine.UID, operator, pos)
+	if err == nil {
+		mine.Position = pos
+		mine.Operator = operator
+	}
+	return err
+}

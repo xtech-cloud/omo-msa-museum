@@ -174,7 +174,10 @@ func (mine *AnchorService) UpdateByFilter(ctx context.Context, in *pb.RequestUpd
 	var err error
 	if in.Field == "cover" {
 		err = info.UpdateCover(in.Value, in.Operator)
-	} else if in.Field == "targets" {
+	} else if in.Field == "position" {
+		size := cache.ParseSize(in.Value)
+		err = info.UpdatePosition(in.Operator, size)
+	} else {
 		err = errors.New("the field not defined")
 	}
 	if err != nil {
