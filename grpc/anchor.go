@@ -118,10 +118,8 @@ func (mine *AnchorService) GetListByFilter(ctx context.Context, in *pb.RequestFi
 	inLog(path, in)
 	var list []*cache.AnchorInfo
 	var err error
-	if in.Field == "" {
-
-	} else if in.Field == "status" {
-
+	if in.Field == "parent" {
+		list,err = cache.Context().GetAnchorsByParent(in.Value)
 	} else {
 		err = errors.New("the key not defined")
 	}

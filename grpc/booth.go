@@ -154,13 +154,20 @@ func (mine *BoothService) UpdateByFilter(ctx context.Context, in *pb.RequestUpda
 		out.Status = outError(path, "the uid is empty ", pbstatus.ResultStatus_Empty)
 		return nil
 	}
-	_, er := cache.Context().GetBooth(in.Uid)
+	info, er := cache.Context().GetBooth(in.Uid)
 	if er != nil {
 		out.Status = outError(path, "the panorama not found ", pbstatus.ResultStatus_NotExisted)
 		return nil
 	}
 	var err error
-
+	if in.Field == "exhibit" {
+		err = info.UpdateExhibit(in.Value, in.Operator)
+	}else if in.Field == "position" {
+		size := cache.ParseSize(in.Value)
+		err = info.UpdatePosition(in.Operator, size)
+	} else {
+		err = errors.New("the key not defined")
+	}
 	if err != nil {
 		out.Status = outError(path, err.Error(), pbstatus.ResultStatus_DBException)
 		return nil

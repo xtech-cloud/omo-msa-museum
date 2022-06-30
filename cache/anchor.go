@@ -55,6 +55,20 @@ func (mine *cacheContext) GetAnchor(uid string) (*AnchorInfo, error) {
 	return info, nil
 }
 
+func (mine *cacheContext) GetAnchorsByParent(uid string) ([]*AnchorInfo,error) {
+	array, err := nosql.GetAnchorsByParent(uid)
+	if err != nil {
+		return nil,err
+	}
+	list := make([]*AnchorInfo, 0, 20)
+	for _, item := range array {
+		info := new(AnchorInfo)
+		info.initInfo(item)
+		list = append(list, info)
+	}
+	return list,nil
+}
+
 func (mine *AnchorInfo) initInfo(db *nosql.Anchor) {
 	mine.UID = db.UID.Hex()
 	mine.ID = db.ID
