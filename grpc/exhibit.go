@@ -213,7 +213,7 @@ func (mine *ExhibitService) UpdateByFilter(ctx context.Context, in *pb.RequestUp
 	var err error
 	if in.Field == "sn" {
 		err = info.UpdateSN(in.Value, in.Operator)
-	}else if in.Field == "size" {
+	} else if in.Field == "size" {
 		size := cache.ParseSize(in.Value)
 		err = info.UpdateSize(in.Operator, size)
 	} else {

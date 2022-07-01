@@ -110,6 +110,27 @@ func (mine *AnchorInfo) UpdateCover(cover, operator string) error {
 	return err
 }
 
+
+func (mine *AnchorInfo) UpdateLink(operator, link string) error {
+	err := nosql.UpdateAnchorLink(mine.UID, link, operator)
+	if err == nil {
+		mine.Link = link
+		mine.Operator = operator
+		mine.UpdateTime = time.Now()
+	}
+	return err
+}
+
+func (mine *AnchorInfo) UpdatePanorama(operator, panorama string) error {
+	err := nosql.UpdateAnchorPanorama(mine.UID,panorama, operator)
+	if err == nil {
+		mine.Panorama = panorama
+		mine.Operator = operator
+		mine.UpdateTime = time.Now()
+	}
+	return err
+}
+
 func (mine *AnchorInfo) UpdatePosition(operator string, pos proxy.VectorInfo) error {
 	err := nosql.UpdateAnchorPosition(mine.UID, operator, pos)
 	if err == nil {

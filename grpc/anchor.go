@@ -177,6 +177,10 @@ func (mine *AnchorService) UpdateByFilter(ctx context.Context, in *pb.RequestUpd
 	} else if in.Field == "position" {
 		size := cache.ParseSize(in.Value)
 		err = info.UpdatePosition(in.Operator, size)
+	} else if in.Field == "panorama" {
+		err = info.UpdatePanorama(in.Operator, in.Value)
+	} else if in.Field == "link" {
+		err = info.UpdateLink(in.Operator, in.Value)
 	} else {
 		err = errors.New("the field not defined")
 	}
