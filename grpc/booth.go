@@ -21,7 +21,7 @@ func switchBooth(info *cache.BoothInfo) *pb.BoothInfo {
 	tmp.Creator = info.Creator
 	tmp.Name = info.Name
 	tmp.Remark = info.Remark
-	tmp.Exhibit = info.Exhibit
+	tmp.Exhibits = info.Exhibits
 	tmp.Owner = info.Owner
 	tmp.Parent = info.Parent
 	tmp.Position = &pb.Vector3{X: info.Position.X, Y: info.Position.Y}
@@ -160,8 +160,8 @@ func (mine *BoothService) UpdateByFilter(ctx context.Context, in *pb.RequestUpda
 		return nil
 	}
 	var err error
-	if in.Field == "exhibit" {
-		err = info.UpdateExhibit(in.Value, in.Operator)
+	if in.Field == "exhibits" {
+		err = info.UpdateExhibit(in.Operator, in.Values)
 	}else if in.Field == "position" {
 		size := cache.ParseSize(in.Value)
 		err = info.UpdatePosition(in.Operator, size)

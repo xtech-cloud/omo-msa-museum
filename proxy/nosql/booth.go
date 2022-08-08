@@ -19,7 +19,7 @@ type Booth struct {
 
 	Name    string            `json:"name" bson:"name"`
 	Remark  string            `json:"remark" bson:"remark"`
-	Exhibit   string          `json:"exhibit" bson:"exhibit"`
+	Exhibits   []string          `json:"exhibits" bson:"exhibits"`
 	Owner string              `json:"owner" bson:"owner"`
 	Parent string             `json:"parent" bson:"parent"`
 	Position proxy.VectorInfo `json:"position" bson:"position"`
@@ -95,8 +95,8 @@ func UpdateBoothBase(uid, name, remark, operator string) error {
 	return err
 }
 
-func UpdateBoothExhibit(uid, exhibit, operator string) error {
-	msg := bson.M{"exhibit": exhibit, "operator":operator, "updatedAt": time.Now()}
+func UpdateBoothExhibit(uid, operator string, arr []string) error {
+	msg := bson.M{"exhibits": arr, "operator":operator, "updatedAt": time.Now()}
 	_, err := updateOne(TableBooth, uid, msg)
 	return err
 }

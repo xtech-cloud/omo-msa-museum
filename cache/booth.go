@@ -13,7 +13,7 @@ type BoothInfo struct {
 	Remark  string
 	Parent string
 	Owner   string
-	Exhibit string
+	Exhibits []string
 	Position proxy.VectorInfo
 }
 
@@ -25,7 +25,7 @@ func (mine *cacheContext) CreateBooth(name, remark, owner, parent, operator stri
 	db.Creator = operator
 	db.Name = name
 	db.Remark = remark
-	db.Exhibit = ""
+	db.Exhibits = make([]string, 0, 1)
 	db.Parent = parent
 	db.Owner = owner
 	if owner == "" {
@@ -100,14 +100,14 @@ func (mine *BoothInfo) initInfo(db *nosql.Booth) {
 	mine.Operator = db.Operator
 	mine.Parent = db.Parent
 	mine.Owner = db.Owner
-	mine.Exhibit = db.Exhibit
+	mine.Exhibits = db.Exhibits
 	mine.Position = db.Position
 }
 
-func (mine *BoothInfo) UpdateExhibit(exhibit, operator string) error {
-	err := nosql.UpdateBoothExhibit(mine.UID, exhibit, operator)
+func (mine *BoothInfo) UpdateExhibit(operator string, arr []string) error {
+	err := nosql.UpdateBoothExhibit(mine.UID, operator, arr)
 	if err == nil {
-		mine.Exhibit = exhibit
+		mine.Exhibits = arr
 		mine.Operator = operator
 		mine.UpdateTime = time.Now()
 	}
