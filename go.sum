@@ -544,6 +544,8 @@ github.com/xtech-cloud/omo-msp-museum v1.0.5 h1:pcFpfL/8mMTQSH69By+jmmzO2IRVPWtg
 github.com/xtech-cloud/omo-msp-museum v1.0.5/go.mod h1:PkO+qNUZY9b2AVsRwau8XgqzDeJ5uv6EqP9XFzg09IA=
 github.com/xtech-cloud/omo-msp-museum v1.0.6 h1:DiZSQqfQQPDfkQqSpaKeGjpleMk6vYRyZRsTOdBObS4=
 github.com/xtech-cloud/omo-msp-museum v1.0.6/go.mod h1:PkO+qNUZY9b2AVsRwau8XgqzDeJ5uv6EqP9XFzg09IA=
+github.com/xtech-cloud/omo-msp-museum v1.0.7 h1:iCxIKmDBn7Z9tooszQChh3FRLan1nOcKE9GZpW64aqk=
+github.com/xtech-cloud/omo-msp-museum v1.0.7/go.mod h1:PkO+qNUZY9b2AVsRwau8XgqzDeJ5uv6EqP9XFzg09IA=
 github.com/xtech-cloud/omo-msp-status v1.0.1 h1:FfqriKg4T6PKTI7+o//KBiZPMhZqhfSnwff/MB4y6D4=
 github.com/xtech-cloud/omo-msp-status v1.0.1/go.mod h1:TZEgM32ZnapuqmsPPdStqgBeeWE708h6YBxb1qtbMFk=
 go.etcd.io/bbolt v1.3.4 h1:hi1bXHMVrlQh6WwxAy+qZCV/SYIlqo+Ushwdpa4tAKg=

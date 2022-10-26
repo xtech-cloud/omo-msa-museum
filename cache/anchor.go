@@ -13,12 +13,13 @@ type AnchorInfo struct {
 	baseInfo
 	Remark   string
 	Cover    string
-	Parent string
+	Parent   string
 	Panorama string
-	Link string
-	Owner string
+	Link     string
+	Owner    string
 	Position proxy.VectorInfo
-	Tags    []string
+	Tags     []string
+	Assets   []string
 }
 
 func (mine *cacheContext) CreateAnchor(name, remark, owner, parent, operator string, tags []string) (*AnchorInfo, error) {
@@ -33,6 +34,7 @@ func (mine *cacheContext) CreateAnchor(name, remark, owner, parent, operator str
 	db.Parent = parent
 	db.Cover = ""
 	db.Tags = tags
+	db.Assets = make([]string, 0, 1)
 	err := nosql.CreateAnchor(db)
 	if err != nil {
 		return nil, err
@@ -55,10 +57,10 @@ func (mine *cacheContext) GetAnchor(uid string) (*AnchorInfo, error) {
 	return info, nil
 }
 
-func (mine *cacheContext) GetAnchorsByParent(uid string) ([]*AnchorInfo,error) {
+func (mine *cacheContext) GetAnchorsByParent(uid string) ([]*AnchorInfo, error) {
 	array, err := nosql.GetAnchorsByParent(uid)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	list := make([]*AnchorInfo, 0, 20)
 	for _, item := range array {
@@ -66,7 +68,7 @@ func (mine *cacheContext) GetAnchorsByParent(uid string) ([]*AnchorInfo,error) {
 		info.initInfo(item)
 		list = append(list, info)
 	}
-	return list,nil
+	return list, nil
 }
 
 func (mine *AnchorInfo) initInfo(db *nosql.Anchor) {
@@ -85,6 +87,7 @@ func (mine *AnchorInfo) initInfo(db *nosql.Anchor) {
 	mine.Panorama = db.Panorama
 	mine.Position = db.Position
 	mine.Tags = db.Tags
+	mine.Assets = db.Assets
 }
 
 func (mine *AnchorInfo) UpdateBase(name, remark, operator string) error {
@@ -110,7 +113,6 @@ func (mine *AnchorInfo) UpdateCover(cover, operator string) error {
 	return err
 }
 
-
 func (mine *AnchorInfo) UpdateLink(operator, link string) error {
 	err := nosql.UpdateAnchorLink(mine.UID, link, operator)
 	if err == nil {
@@ -122,7 +124,7 @@ func (mine *AnchorInfo) UpdateLink(operator, link string) error {
 }
 
 func (mine *AnchorInfo) UpdatePanorama(operator, panorama string) error {
-	err := nosql.UpdateAnchorPanorama(mine.UID,panorama, operator)
+	err := nosql.UpdateAnchorPanorama(mine.UID, panorama, operator)
 	if err == nil {
 		mine.Panorama = panorama
 		mine.Operator = operator
@@ -135,6 +137,15 @@ func (mine *AnchorInfo) UpdatePosition(operator string, pos proxy.VectorInfo) er
 	err := nosql.UpdateAnchorPosition(mine.UID, operator, pos)
 	if err == nil {
 		mine.Position = pos
+		mine.Operator = operator
+	}
+	return err
+}
+
+func (mine *AnchorInfo) UpdateAssets(operator string, arr []string) error {
+	err := nosql.UpdateAnchorAssets(mine.UID, operator, arr)
+	if err == nil {
+		mine.Assets = arr
 		mine.Operator = operator
 	}
 	return err

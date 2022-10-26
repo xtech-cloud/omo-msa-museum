@@ -22,12 +22,13 @@ func switchAnchor(info *cache.AnchorInfo) *pb.AnchorInfo {
 	tmp.Name = info.Name
 	tmp.Remark = info.Remark
 	tmp.Cover = info.Cover
-    tmp.Parent = info.Parent
-    tmp.Panorama = info.Panorama
-    tmp.Link = info.Link
-    //tmp.Owner = info.Owner
-    tmp.Position = &pb.Vector3{X: info.Position.X, Y: info.Position.Y}
+	tmp.Parent = info.Parent
+	tmp.Panorama = info.Panorama
+	tmp.Link = info.Link
+	//tmp.Owner = info.Owner
+	tmp.Position = &pb.Vector3{X: info.Position.X, Y: info.Position.Y}
 	tmp.Tags = info.Tags
+	tmp.Assets = info.Assets
 	return tmp
 }
 
@@ -119,7 +120,7 @@ func (mine *AnchorService) GetListByFilter(ctx context.Context, in *pb.RequestFi
 	var list []*cache.AnchorInfo
 	var err error
 	if in.Field == "parent" {
-		list,err = cache.Context().GetAnchorsByParent(in.Value)
+		list, err = cache.Context().GetAnchorsByParent(in.Value)
 	} else {
 		err = errors.New("the key not defined")
 	}
@@ -181,6 +182,8 @@ func (mine *AnchorService) UpdateByFilter(ctx context.Context, in *pb.RequestUpd
 		err = info.UpdatePanorama(in.Operator, in.Value)
 	} else if in.Field == "link" {
 		err = info.UpdateLink(in.Operator, in.Value)
+	} else if in.Field == "assets" {
+		err = info.UpdateAssets(in.Operator, in.Values)
 	} else {
 		err = errors.New("the field not defined")
 	}
