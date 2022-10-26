@@ -10,9 +10,9 @@ import (
 
 type BoothInfo struct {
 	baseInfo
-	Remark  string
-	Parent string
-	Owner   string
+	Remark   string
+	Parent   string
+	Owner    string
 	Exhibits []string
 	Position proxy.VectorInfo
 }
@@ -119,6 +119,16 @@ func (mine *BoothInfo) UpdateBase(name, remark, operator string) error {
 	if err == nil {
 		mine.Name = name
 		mine.Remark = remark
+		mine.Operator = operator
+		mine.UpdateTime = time.Now()
+	}
+	return err
+}
+
+func (mine *BoothInfo) UpdateParent(parent, operator string) error {
+	err := nosql.UpdateBoothParent(mine.UID, parent, operator)
+	if err == nil {
+		mine.Parent = parent
 		mine.Operator = operator
 		mine.UpdateTime = time.Now()
 	}

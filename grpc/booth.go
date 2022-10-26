@@ -162,9 +162,11 @@ func (mine *BoothService) UpdateByFilter(ctx context.Context, in *pb.RequestUpda
 	var err error
 	if in.Field == "exhibits" {
 		err = info.UpdateExhibit(in.Operator, in.Values)
-	}else if in.Field == "position" {
+	} else if in.Field == "position" {
 		size := cache.ParseSize(in.Value)
 		err = info.UpdatePosition(in.Operator, size)
+	} else if in.Field == "parent" {
+		err = info.UpdateParent(in.Value, in.Operator)
 	} else {
 		err = errors.New("the key not defined")
 	}

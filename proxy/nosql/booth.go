@@ -17,11 +17,11 @@ type Booth struct {
 	Creator     string             `json:"creator" bson:"creator"`
 	Operator    string             `json:"operator" bson:"operator"`
 
-	Name    string            `json:"name" bson:"name"`
-	Remark  string            `json:"remark" bson:"remark"`
-	Exhibits   []string          `json:"exhibits" bson:"exhibits"`
-	Owner string              `json:"owner" bson:"owner"`
-	Parent string             `json:"parent" bson:"parent"`
+	Name     string           `json:"name" bson:"name"`
+	Remark   string           `json:"remark" bson:"remark"`
+	Exhibits []string         `json:"exhibits" bson:"exhibits"`
+	Owner    string           `json:"owner" bson:"owner"`
+	Parent   string           `json:"parent" bson:"parent"`
 	Position proxy.VectorInfo `json:"position" bson:"position"`
 }
 
@@ -90,19 +90,25 @@ func GetAllBoothsByParent(parent string) ([]*Booth, error) {
 }
 
 func UpdateBoothBase(uid, name, remark, operator string) error {
-	msg := bson.M{"name": name, "remark": remark, "operator":operator, "updatedAt": time.Now()}
+	msg := bson.M{"name": name, "remark": remark, "operator": operator, "updatedAt": time.Now()}
+	_, err := updateOne(TableBooth, uid, msg)
+	return err
+}
+
+func UpdateBoothParent(uid, parent, operator string) error {
+	msg := bson.M{"parent": parent, "operator": operator, "updatedAt": time.Now()}
 	_, err := updateOne(TableBooth, uid, msg)
 	return err
 }
 
 func UpdateBoothExhibit(uid, operator string, arr []string) error {
-	msg := bson.M{"exhibits": arr, "operator":operator, "updatedAt": time.Now()}
+	msg := bson.M{"exhibits": arr, "operator": operator, "updatedAt": time.Now()}
 	_, err := updateOne(TableBooth, uid, msg)
 	return err
 }
 
 func UpdateBoothPosition(uid, operator string, pos proxy.VectorInfo) error {
-	msg := bson.M{"position": pos, "operator":operator, "updatedAt": time.Now()}
+	msg := bson.M{"position": pos, "operator": operator, "updatedAt": time.Now()}
 	_, err := updateOne(TableBooth, uid, msg)
 	return err
 }
