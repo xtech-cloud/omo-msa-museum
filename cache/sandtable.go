@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	SandtableIdle uint8 = 0
+	SandtableIdle  uint8 = 0
 	SandtableFroze uint8 = 1
 )
 
@@ -18,16 +18,16 @@ const (
 type SandtableInfo struct {
 	Status uint8
 	baseInfo
-	Remark   string
-	Owner    string
+	Remark     string
+	Owner      string
 	Background string
-	Mask string
-	Width uint32
-	Height uint32
-	Narrate string
-	BGM string
-	Tags     []string
-	Paths []*proxy.PathInfo
+	Mask       string
+	Width      uint32
+	Height     uint32
+	Narrate    string
+	BGM        string
+	Tags       []string
+	Paths      []*proxy.PathInfo
 }
 
 func (mine *cacheContext) CreateSandtable(name, remark, bg, owner, operator string, w, h uint32) (*SandtableInfo, error) {
@@ -112,7 +112,7 @@ func (mine *SandtableInfo) UpdateBase(name, remark, operator string) error {
 	return err
 }
 
-func (mine *SandtableInfo) UpdateBGM(operator, asset string) error {
+func (mine *SandtableInfo) UpdateBGM(asset, operator string) error {
 	err := nosql.UpdateSandtableBGM(mine.UID, asset, operator)
 	if err == nil {
 		mine.BGM = asset
@@ -121,7 +121,7 @@ func (mine *SandtableInfo) UpdateBGM(operator, asset string) error {
 	return err
 }
 
-func (mine *SandtableInfo) UpdateNarrate(operator, asset string) error {
+func (mine *SandtableInfo) UpdateNarrate(asset, operator string) error {
 	err := nosql.UpdateSandtableNarrate(mine.UID, asset, operator)
 	if err == nil {
 		mine.Narrate = asset
@@ -141,14 +141,14 @@ func (mine *SandtableInfo) UpdateBackground(asset, operator string, width, heigh
 	return err
 }
 
-func (mine *SandtableInfo) UpdatePath(operator, path, name, color string, points []*pb.PathKeyInfo) (string,error) {
+func (mine *SandtableInfo) UpdatePath(operator, path, name, color string, points []*pb.PathKeyInfo) (string, error) {
 	if len(path) > 0 {
 		er := mine.RemovePath(operator, path)
 		if er != nil {
-			return "",er
+			return "", er
 		}
 	}
-	if len(name) < 1 && len(points) == 0{
+	if len(name) < 1 && len(points) == 0 {
 		return "", nil
 	}
 	return mine.CreatePath(operator, path, name, color, points)
@@ -158,7 +158,7 @@ func (mine *SandtableInfo) CreatePath(operator, path, name, color string, points
 	info := new(proxy.PathInfo)
 	if len(path) < 1 {
 		info.UID = primitive.NewObjectID().Hex()
-	}else{
+	} else {
 		info.UID = path
 	}
 	info.Name = name
@@ -174,7 +174,7 @@ func (mine *SandtableInfo) CreatePath(operator, path, name, color string, points
 		mine.Paths = append(mine.Paths, info)
 		mine.Operator = operator
 	}
-	return info.UID,err
+	return info.UID, err
 }
 
 func (mine *SandtableInfo) RemovePath(operator, path string) error {
@@ -183,9 +183,9 @@ func (mine *SandtableInfo) RemovePath(operator, path string) error {
 		mine.Operator = operator
 		for i, info := range mine.Paths {
 			if info.UID == path {
-				if i == len(mine.Paths) - 1 {
+				if i == len(mine.Paths)-1 {
 					mine.Paths = append(mine.Paths[:i])
-				}else{
+				} else {
 					mine.Paths = append(mine.Paths[:i], mine.Paths[i+1:]...)
 				}
 				break
@@ -199,10 +199,10 @@ func (mine *SandtableInfo) Remove(operator string) error {
 	return nosql.RemoveSandtable(mine.UID, operator)
 }
 
-func (mine *SandtableInfo) GetAnchors() ([]*AnchorInfo,error) {
+func (mine *SandtableInfo) GetAnchors() ([]*AnchorInfo, error) {
 	array, err := nosql.GetAnchorsByParent(mine.UID)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	list := make([]*AnchorInfo, 0, 20)
 	for _, item := range array {
@@ -210,5 +210,5 @@ func (mine *SandtableInfo) GetAnchors() ([]*AnchorInfo,error) {
 		info.initInfo(item)
 		list = append(list, info)
 	}
-	return list,nil
+	return list, nil
 }
