@@ -14,7 +14,7 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/tidwall/gjson v1.6.0
-	github.com/xtech-cloud/omo-msp-museum v1.0.7
+	github.com/xtech-cloud/omo-msp-museum v1.0.8
 	github.com/xtech-cloud/omo-msp-status v1.0.1
 	go.mongodb.org/mongo-driver v1.4.6
 	go.uber.org/zap v1.13.0 // indirect

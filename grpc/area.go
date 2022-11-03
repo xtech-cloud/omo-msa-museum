@@ -23,6 +23,7 @@ func switchArea(info *cache.AreaInfo) *pb.AreaInfo {
 	tmp.Remark = info.Remark
 	tmp.Parent = info.Parent
 	tmp.Owner = info.Owner
+	tmp.Template = info.Template
 	return tmp
 }
 
@@ -158,18 +159,20 @@ func (mine *AreaService) UpdateByFilter(ctx context.Context, in *pb.RequestUpdat
 		out.Status = outError(path, "the uid is empty ", pbstatus.ResultStatus_Empty)
 		return nil
 	}
-	//info, er := cache.Context().GetArea(in.Uid)
-	//if er != nil {
-	//	out.Status = outError(path, "the area not found ", pbstatus.ResultStatus_NotExisted)
-	//	return nil
-	//}
+	info, er := cache.Context().GetArea(in.Uid)
+	if er != nil {
+		out.Status = outError(path, "the area not found ", pbstatus.ResultStatus_NotExisted)
+		return nil
+	}
 	var err error
 	if in.Field == "cover" {
 		//info.UpdateBase()
 	} else if in.Field == "size" {
 
+	} else if in.Field == "template" {
+		err = info.UpdateTemplate(in.Value, in.Operator)
 	} else if in.Field == "assets" {
-	} else{
+	} else {
 		err = errors.New("the field not defined")
 	}
 	if err != nil {

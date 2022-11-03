@@ -9,9 +9,12 @@ import (
 
 type AreaInfo struct {
 	baseInfo
-	Remark string
-	Owner string
-	Parent string
+	Remark   string
+	Owner    string
+	Parent   string
+	Template string //产品配置模板
+	Width    int32
+	Height   int32
 }
 
 func (mine *cacheContext) CreateArea(name, remark, owner, parent, operator string) (*AreaInfo, error) {
@@ -24,7 +27,10 @@ func (mine *cacheContext) CreateArea(name, remark, owner, parent, operator strin
 	db.Remark = remark
 	db.Owner = owner
 	db.Parent = parent
-	
+	db.Width = 0
+	db.Height = 0
+	db.Template = ""
+
 	err := nosql.CreateArea(db)
 	if err != nil {
 		return nil, err
@@ -102,6 +108,9 @@ func (mine *AreaInfo) initInfo(db *nosql.Area) {
 	mine.Operator = db.Operator
 	mine.Parent = db.Parent
 	mine.Owner = db.Owner
+	mine.Template = db.Template
+	mine.Width = db.Width
+	mine.Height = db.Height
 }
 
 func (mine *AreaInfo) UpdateBase(name, remark, operator string) error {
@@ -114,7 +123,15 @@ func (mine *AreaInfo) UpdateBase(name, remark, operator string) error {
 	return err
 }
 
+func (mine *AreaInfo) UpdateTemplate(template, operator string) error {
+	err := nosql.UpdateAreaTemplate(mine.UID, template, operator)
+	if err == nil {
+		mine.Template = template
+		mine.Operator = operator
+	}
+	return err
+}
+
 func (mine *AreaInfo) Remove(operator string) error {
 	return nosql.RemoveArea(mine.UID, operator)
 }
-

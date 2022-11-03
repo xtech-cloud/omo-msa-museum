@@ -16,12 +16,13 @@ type Area struct {
 	Creator     string             `json:"creator" bson:"creator"`
 	Operator    string             `json:"operator" bson:"operator"`
 
-	Name     string   `json:"name" bson:"name"`
-	Remark   string   `json:"remark" bson:"remark"`
-	Owner string `json:"owner" bson:"owner"`
-	Parent string `json:"parent" bson:"parent"`
-	Width float32 `json:"width" bson:"width"`
-	Height float32 `json:"height" bson:"height"`
+	Name     string `json:"name" bson:"name"`
+	Remark   string `json:"remark" bson:"remark"`
+	Owner    string `json:"owner" bson:"owner"`
+	Parent   string `json:"parent" bson:"parent"`
+	Template string `json:"template" bson:"template"`
+	Width    int32  `json:"width" bson:"width"`
+	Height   int32  `json:"height" bson:"height"`
 }
 
 func CreateArea(info *Area) error {
@@ -108,6 +109,12 @@ func GetAllAreas() ([]*Area, error) {
 
 func UpdateAreaBase(uid, name, remark, operator string) error {
 	msg := bson.M{"name": name, "remark": remark, "operator": operator, "updatedAt": time.Now()}
+	_, err := updateOne(TableArea, uid, msg)
+	return err
+}
+
+func UpdateAreaTemplate(uid, template, operator string) error {
+	msg := bson.M{"template": template, "operator": operator, "updatedAt": time.Now()}
 	_, err := updateOne(TableArea, uid, msg)
 	return err
 }
