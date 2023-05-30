@@ -17,13 +17,13 @@ type Exhibit struct {
 	Creator     string             `json:"creator" bson:"creator"`
 	Operator    string             `json:"operator" bson:"operator"`
 
-	Name   string   `json:"name" bson:"name"`
-	Owner  string   `json:"owner" bson:"owner"`
-	Entity string `json:"entity" bson:"entity"`
-	SN string `json:"sn" bson:"sn"`
-	Size proxy.VectorInfo `json:"size" bson:"size"`
-	Tags []string `json:"tags" bson:"tags"`
-	Locals []*proxy.LocalInfo `json:"locals" bson:"locals"`
+	Name     string               `json:"name" bson:"name"`
+	Owner    string               `json:"owner" bson:"owner"`
+	Entity   string               `json:"entity" bson:"entity"`
+	SN       string               `json:"sn" bson:"sn"`
+	Size     proxy.VectorInfo     `json:"size" bson:"size"`
+	Tags     []string             `json:"tags" bson:"tags"`
+	Locals   []*proxy.LocalInfo   `json:"locals" bson:"locals"`
 	Specials []*proxy.SpecialInfo `json:"specials" bson:"specials"`
 }
 
@@ -68,7 +68,7 @@ func GetExhibitByName(name string) (*Exhibit, error) {
 }
 
 func GetExhibitBySN(owner, sn string) (*Exhibit, error) {
-	filter := bson.M{"owner":owner, "sn": sn, "deletedAt": new(time.Time)}
+	filter := bson.M{"owner": owner, "sn": sn, "deletedAt": new(time.Time)}
 	result, err := findOneBy(TableExhibit, filter)
 	if err != nil {
 		return nil, err

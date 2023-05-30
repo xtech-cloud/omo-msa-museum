@@ -223,9 +223,9 @@ func (mine *SandtableService) UpdateByFilter(ctx context.Context, in *pb.Request
 	var err error
 	if in.Field == "bgm" {
 		err = info.UpdateBGM(in.Value, in.Operator)
-	}else if in.Field == "narrate" {
+	} else if in.Field == "narrate" {
 		err = info.UpdateNarrate(in.Value, in.Operator)
-	}else{
+	} else {
 		err = errors.New("the field not defined")
 	}
 	if err != nil {

@@ -13,12 +13,12 @@ type ExhibitInfo struct {
 	Status uint8
 	Type   uint8
 	baseInfo
-	SN string
-	Entity  string
-	Owner  string
-	Size proxy.VectorInfo
-	Tags   []string
-	Locals []*proxy.LocalInfo
+	SN       string
+	Entity   string
+	Owner    string
+	Size     proxy.VectorInfo
+	Tags     []string
+	Locals   []*proxy.LocalInfo
 	Specials []*proxy.SpecialInfo
 }
 
@@ -180,4 +180,3 @@ func (mine *ExhibitInfo) UpdateSpecials(operator string, list []*pb.SpecialInfo)
 	}
 	return err
 }
-

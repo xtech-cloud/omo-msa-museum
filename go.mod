@@ -1,6 +1,6 @@
 module omo.msa.museum
 
-go 1.15
+go 1.18
 
 replace google.golang.org/grpc => github.com/grpc/grpc-go v1.26.0
 

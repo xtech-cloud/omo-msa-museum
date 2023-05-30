@@ -56,7 +56,7 @@ func (mine *ExhibitService) AddOne(ctx context.Context, in *pb.ReqExhibitAdd, ou
 	}
 
 	if cache.Context().HadExhibitByName(in.Name) {
-		out.Status = outError(path,"the name is repeated", pbstatus.ResultStatus_Repeated)
+		out.Status = outError(path, "the name is repeated", pbstatus.ResultStatus_Repeated)
 		return nil
 	}
 

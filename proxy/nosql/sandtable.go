@@ -18,18 +18,18 @@ type Sandtable struct {
 	Creator     string             `json:"creator" bson:"creator"`
 	Operator    string             `json:"operator" bson:"operator"`
 
-	Status uint8 `json:"status" bson:"status"`
-	Name   string `json:"name" bson:"name"`
-	Remark string `json:"remark" bson:"remark"`
-	Owner  string `json:"owner" bson:"owner"`
-	Background string `json:"background" bson:"background"`
-	Mask string `json:"mask" bson:"mask"`
-	Width uint32 `json:"width" bson:"width"`
-	Height uint32 `json:"height" bson:"height"`
-	Narrate string `json:"narrate" bson:"narrate"`
-	BGM string `json:"bgm" bson:"bgm"`
-	Paths []*proxy.PathInfo `json:"paths" bson:"paths"`
-	Tags []string `json:"tags" bson:"tags"`
+	Status     uint8             `json:"status" bson:"status"`
+	Name       string            `json:"name" bson:"name"`
+	Remark     string            `json:"remark" bson:"remark"`
+	Owner      string            `json:"owner" bson:"owner"`
+	Background string            `json:"background" bson:"background"`
+	Mask       string            `json:"mask" bson:"mask"`
+	Width      uint32            `json:"width" bson:"width"`
+	Height     uint32            `json:"height" bson:"height"`
+	Narrate    string            `json:"narrate" bson:"narrate"`
+	BGM        string            `json:"bgm" bson:"bgm"`
+	Paths      []*proxy.PathInfo `json:"paths" bson:"paths"`
+	Tags       []string          `json:"tags" bson:"tags"`
 }
 
 func CreateSandtable(info *Sandtable) error {
@@ -84,7 +84,7 @@ func UpdateSandtableBase(uid, name, remark, operator string) error {
 }
 
 func UpdateSandtableBG(uid, cover, operator string, width, height uint32) error {
-	msg := bson.M{"background": cover, "width":width, "height":height, "operator": operator, "updatedAt": time.Now()}
+	msg := bson.M{"background": cover, "width": width, "height": height, "operator": operator, "updatedAt": time.Now()}
 	_, err := updateOne(TableSandtable, uid, msg)
 	return err
 }
@@ -107,13 +107,13 @@ func RemoveSandtable(uid, operator string) error {
 }
 
 func UpdateSandtableBGM(uid, asset, operator string) error {
-	msg := bson.M{"bgm": asset, "operator":operator, "updatedAt": time.Now()}
+	msg := bson.M{"bgm": asset, "operator": operator, "updatedAt": time.Now()}
 	_, err := updateOne(TableSandtable, uid, msg)
 	return err
 }
 
 func UpdateSandtableNarrate(uid, asset, operator string) error {
-	msg := bson.M{"narrate": asset, "operator":operator, "updatedAt": time.Now()}
+	msg := bson.M{"narrate": asset, "operator": operator, "updatedAt": time.Now()}
 	_, err := updateOne(TableSandtable, uid, msg)
 	return err
 }

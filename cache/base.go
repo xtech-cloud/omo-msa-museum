@@ -85,9 +85,9 @@ func ParseSize(str string) proxy.VectorInfo {
 	if len(arr) != 3 {
 		return vec
 	}
-	x,_ := strconv.ParseFloat(arr[0], 32)
-	y,_ := strconv.ParseFloat(arr[1], 32)
-	z,_ := strconv.ParseFloat(arr[2], 32)
+	x, _ := strconv.ParseFloat(arr[0], 32)
+	y, _ := strconv.ParseFloat(arr[1], 32)
+	z, _ := strconv.ParseFloat(arr[2], 32)
 	vec.X = float32(x)
 	vec.Y = float32(y)
 	vec.Z = float32(z)

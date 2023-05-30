@@ -1,15 +1,15 @@
 package proxy
 
 type SpecialInfo struct {
-	ID uint32 `json:"id" bson:"id"`
-	Key string `json:"key" bson:"key"`
+	ID    uint32 `json:"id" bson:"id"`
+	Key   string `json:"key" bson:"key"`
 	Value string `json:"value" bson:"value"`
 }
 
 type LocalInfo struct {
 	Language string `json:"language" bson:"language"`
-	Name string `json:"name" bson:"name"`
-	Remark string `json:"remark" bson:"remark"`
+	Name     string `json:"name" bson:"name"`
+	Remark   string `json:"remark" bson:"remark"`
 }
 
 type VectorInfo struct {
@@ -19,15 +19,15 @@ type VectorInfo struct {
 }
 
 type PathInfo struct {
-	UID string `json:"uid" bson:"uid"`
-	Name string `json:"name" bson:"name"`
-	Color string `json:"color" bson:"color"`
+	UID    string         `json:"uid" bson:"uid"`
+	Name   string         `json:"name" bson:"name"`
+	Color  string         `json:"color" bson:"color"`
 	Points []FrameKeyInfo `json:"points" bson:"points"`
 }
 
 type FrameKeyInfo struct {
-	Key string `json:"key" bson:"key"`
-	Scale float32 `json:"scale" bson:"scale"`
+	Key      string     `json:"key" bson:"key"`
+	Scale    float32    `json:"scale" bson:"scale"`
 	Position VectorInfo `json:"position" bson:"position"`
 	Rotation VectorInfo `json:"rotation" bson:"rotation"`
 }
